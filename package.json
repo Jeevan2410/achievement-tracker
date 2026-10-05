@@ -1,0 +1,21 @@
+{
+  "name": "achievement-tracker",
+  "version": "0.1.0",
+  "description": "CLI that shows your progress toward GitHub profile achievement tiers using public GitHub data",
+  "type": "module",
+  "bin": { "achievement-tracker": "dist/cli.js" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["github", "achievements", "cli", "profile"],
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
