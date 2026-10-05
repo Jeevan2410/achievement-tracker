@@ -1,3 +1,5 @@
+import { apiErrorMessage } from "./errors.js";
+
 const API = "https://api.github.com";
 
 function headers(token?: string): Record<string, string> {
@@ -12,7 +14,7 @@ function headers(token?: string): Record<string, string> {
 async function get<T>(path: string, token?: string): Promise<T> {
   const res = await fetch(`${API}${path}`, { headers: headers(token) });
   if (!res.ok) {
-    throw new Error(`GitHub API ${res.status} for ${path}: ${res.statusText}`);
+    throw new Error(apiErrorMessage(res.status, path, Boolean(token)));
   }
   return (await res.json()) as T;
 }
