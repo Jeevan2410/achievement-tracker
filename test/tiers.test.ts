@@ -33,6 +33,13 @@ describe("computeProgress", () => {
     expect(p.remaining).toBe(83);
   });
 
+  it("treats a single-tier badge as done once reached", () => {
+    expect(computeProgress(ACHIEVEMENTS.publicSponsor, 0)).toMatchObject({ tier: 0, next: 1, remaining: 1 });
+    const done = computeProgress(ACHIEVEMENTS.publicSponsor, 2);
+    expect(done).toMatchObject({ tier: 1, next: null });
+    expect(formatProgress(done)).toContain("top tier reached");
+  });
+
   it("treats a count equal to a threshold as reaching it", () => {
     expect(computeProgress(ACHIEVEMENTS.starstruck, 16).tier).toBe(1);
   });
