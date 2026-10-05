@@ -25,6 +25,10 @@ node dist/cli.js <github-username>
 ```bash
 node dist/cli.js <github-username>
 ```
+Add `--json` for machine-readable output:
+```bash
+node dist/cli.js <github-username> --json
+```
 Set `GITHUB_TOKEN` to raise the API rate limit. The tool only reads public data.
 
 Tier thresholds are community-documented, not official; see
