@@ -1,13 +1,22 @@
 #!/usr/bin/env node
-import { parseArgs } from "./args.js";
+import { readFileSync } from "node:fs";
+import { helpText, parseArgs } from "./args.js";
 import { ACHIEVEMENTS, computeProgress, formatProgress } from "./tiers.js";
 import { maxOwnedRepoStars, mergedPullRequests } from "./github.js";
 
 async function main(): Promise<void> {
-  const { user, json } = parseArgs(process.argv.slice(2));
+  const { user, json, help, version } = parseArgs(process.argv.slice(2));
+  if (help) {
+    console.log(helpText());
+    return;
+  }
+  if (version) {
+    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+    console.log(pkg.version);
+    return;
+  }
   if (!user) {
-    console.error("Usage: achievement-tracker <github-username> [--json]");
-    console.error("Optional: set GITHUB_TOKEN for a higher API rate limit (read-only use).");
+    console.error(helpText());
     process.exit(1);
   }
   const token = process.env.GITHUB_TOKEN;

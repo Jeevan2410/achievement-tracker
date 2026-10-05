@@ -29,6 +29,8 @@ Add `--json` for machine-readable output:
 ```bash
 node dist/cli.js <github-username> --json
 ```
+Run with `--help` for all options or `--version` for the version.
+
 Set `GITHUB_TOKEN` to raise the API rate limit. The tool only reads public data.
 
 Tier thresholds are community-documented, not official; see
