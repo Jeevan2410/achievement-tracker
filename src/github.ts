@@ -25,10 +25,20 @@ export async function mergedPullRequests(user: string, token?: string): Promise<
   return data.total_count;
 }
 
+const PER_PAGE = 100;
+const MAX_PAGES = 10;
+
 export async function maxOwnedRepoStars(user: string, token?: string): Promise<number> {
-  const repos = await get<{ stargazers_count: number; fork: boolean }[]>(
-    `/users/${encodeURIComponent(user)}/repos?per_page=100&type=owner`,
-    token,
-  );
-  return repos.filter((r) => !r.fork).reduce((m, r) => Math.max(m, r.stargazers_count), 0);
+  let max = 0;
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const repos = await get<{ stargazers_count: number; fork: boolean }[]>(
+      `/users/${encodeURIComponent(user)}/repos?per_page=${PER_PAGE}&type=owner&page=${page}`,
+      token,
+    );
+    for (const r of repos) {
+      if (!r.fork) max = Math.max(max, r.stargazers_count);
+    }
+    if (repos.length < PER_PAGE) break;
+  }
+  return max;
 }
