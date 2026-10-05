@@ -34,9 +34,16 @@ export function computeProgress(a: Achievement, count: number): Progress {
   };
 }
 
+/** Text bar showing count / next, clamped to 0-100%. */
+export function progressBar(count: number, next: number, width = 20): string {
+  const ratio = next > 0 ? Math.min(1, Math.max(0, count / next)) : 1;
+  const filled = Math.round(ratio * width);
+  return `[${"#".repeat(filled)}${"-".repeat(width - filled)}] ${Math.round(ratio * 100)}%`;
+}
+
 export function formatProgress(p: Progress): string {
   const head = `${p.name}: ${p.count} ${p.unit} (tier ${p.tier})`;
   return p.next === null
     ? `${head} - top tier reached`
-    : `${head} - ${p.remaining} more to reach ${p.next}`;
+    : `${head} - ${p.remaining} more to reach ${p.next}\n  ${progressBar(p.count, p.next)}`;
 }

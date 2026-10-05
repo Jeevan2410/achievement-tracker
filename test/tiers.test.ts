@@ -1,5 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { ACHIEVEMENTS, computeProgress, formatProgress } from "../src/tiers.js";
+import { ACHIEVEMENTS, computeProgress, formatProgress, progressBar } from "../src/tiers.js";
+
+describe("progressBar", () => {
+  it("renders empty, half and full bars", () => {
+    expect(progressBar(0, 10, 10)).toBe("[----------] 0%");
+    expect(progressBar(5, 10, 10)).toBe("[#####-----] 50%");
+    expect(progressBar(10, 10, 10)).toBe("[##########] 100%");
+  });
+
+  it("clamps counts above the target", () => {
+    expect(progressBar(50, 10, 10)).toBe("[##########] 100%");
+  });
+
+  it("is included in formatted progress below the top tier", () => {
+    const text = formatProgress(computeProgress(ACHIEVEMENTS.pullShark, 64));
+    expect(text).toContain("[##########----------] 50%");
+  });
+});
 
 describe("computeProgress", () => {
   it("reports no tier below the first threshold", () => {
