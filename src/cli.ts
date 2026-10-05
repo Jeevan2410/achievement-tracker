@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+import { parseArgs } from "./args.js";
 import { ACHIEVEMENTS, computeProgress, formatProgress } from "./tiers.js";
 import { maxOwnedRepoStars, mergedPullRequests } from "./github.js";
 
 async function main(): Promise<void> {
-  const user = process.argv[2];
-  if (!user || user.startsWith("-")) {
-    console.error("Usage: achievement-tracker <github-username>");
+  const { user, json } = parseArgs(process.argv.slice(2));
+  if (!user) {
+    console.error("Usage: achievement-tracker <github-username> [--json]");
     console.error("Optional: set GITHUB_TOKEN for a higher API rate limit (read-only use).");
     process.exit(1);
   }
@@ -14,8 +15,15 @@ async function main(): Promise<void> {
     mergedPullRequests(user, token),
     maxOwnedRepoStars(user, token),
   ]);
-  console.log(formatProgress(computeProgress(ACHIEVEMENTS.pullShark, prs)));
-  console.log(formatProgress(computeProgress(ACHIEVEMENTS.starstruck, stars)));
+  const results = [
+    computeProgress(ACHIEVEMENTS.pullShark, prs),
+    computeProgress(ACHIEVEMENTS.starstruck, stars),
+  ];
+  if (json) {
+    console.log(JSON.stringify({ user, achievements: results }, null, 2));
+  } else {
+    for (const p of results) console.log(formatProgress(p));
+  }
 }
 
 main().catch((err) => {
