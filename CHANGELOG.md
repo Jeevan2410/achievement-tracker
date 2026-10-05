@@ -7,6 +7,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - Galaxy Brain progress (accepted Discussions answers), shown when `GITHUB_TOKEN` is set.
+- Public Sponsor status (accounts sponsored publicly), fetched in the same GraphQL request.
 
 ## [0.1.0] - 2026-10-05
 
