@@ -8,6 +8,7 @@ export interface Achievement {
 export const ACHIEVEMENTS: Record<string, Achievement> = {
   pullShark: { name: "Pull Shark", tiers: [2, 16, 128, 1024], unit: "merged PRs" },
   starstruck: { name: "Starstruck", tiers: [16, 128, 512, 4096], unit: "stars on one repo" },
+  galaxyBrain: { name: "Galaxy Brain", tiers: [2, 8, 16, 32], unit: "accepted answers" },
 };
 
 export interface Progress {

@@ -25,6 +25,29 @@ export async function mergedPullRequests(user: string, token?: string): Promise<
   return data.total_count;
 }
 
+const ACCEPTED_ANSWERS_QUERY = `query($login: String!) {
+  user(login: $login) { repositoryDiscussionComments(onlyAnswers: true) { totalCount } }
+}`;
+
+/** Discussions comments marked as the answer (Galaxy Brain). GraphQL requires a token. */
+export async function acceptedAnswers(user: string, token: string): Promise<number> {
+  const res = await fetch(`${API}/graphql`, {
+    method: "POST",
+    headers: { ...headers(token), "Content-Type": "application/json" },
+    body: JSON.stringify({ query: ACCEPTED_ANSWERS_QUERY, variables: { login: user } }),
+  });
+  if (!res.ok) {
+    throw new Error(apiErrorMessage(res.status, "/graphql", true));
+  }
+  const data = (await res.json()) as {
+    data?: { user: { repositoryDiscussionComments: { totalCount: number } } | null };
+    errors?: { message: string }[];
+  };
+  if (data.errors?.length) throw new Error(`GitHub GraphQL error: ${data.errors[0]!.message}`);
+  if (!data.data?.user) throw new Error(`Not found: user ${user}. Check the username.`);
+  return data.data.user.repositoryDiscussionComments.totalCount;
+}
+
 const PER_PAGE = 100;
 const MAX_PAGES = 10;
 

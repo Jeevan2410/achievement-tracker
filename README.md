@@ -31,6 +31,8 @@ node dist/cli.js <github-username> --json
 ```
 Run with `--help` for all options or `--version` for the version.
 
+Galaxy Brain progress (accepted Discussions answers) comes from GitHub's GraphQL API, which needs a token, so it's shown only when `GITHUB_TOKEN` is set.
+
 Set `GITHUB_TOKEN` to raise the API rate limit. The tool only reads public data.
 
 Tier thresholds are community-documented, not official; see
